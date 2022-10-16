@@ -95,7 +95,7 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
     return  ws, losses
 
 
-def mean_squared_error_sgd(y, tx, initial_w, batch_size, max_iters, gamma):
+def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
     """The Stochastic Gradient Descent algorithm (SGD).
             
     Args:
