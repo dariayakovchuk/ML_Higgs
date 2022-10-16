@@ -122,3 +122,11 @@ def mean_squared_error_sgd(y, tx, initial_w, batch_size, max_iters, gamma):
         print("SGD iter. {bi}/{ti}: loss={l}, w0={w0}, w1={w1}".format(
               bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
     return losses, ws
+
+
+def logistic_regression(y, tx, initial_w, max_iters, gamma):
+    pass
+
+
+def reg_logistic_regression(y, tx, lambda_ ,initial_w, max_iters, gamma):
+    pass
