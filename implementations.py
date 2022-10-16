@@ -13,7 +13,8 @@ def compute_loss(y, tx, w):
         the value of the loss (a scalar), corresponding to the input parameters w.
     """
     N = y.shape[0]
-    cost = (1 / 2 * N) * np.sum((y - np.dot(tx, w)) ** 2)
+    print(np.dot(tx, w))
+    cost = (1 / (2 * N)) * np.sum((y - np.dot(tx, w)) ** 2)
     return cost
 
 
@@ -45,7 +46,9 @@ def ridge_regression(y, tx, lambda_):
     """
     n = tx.shape[1]
     I = np.eye(n)
-    w_ridge = np.linalg.solve(np.dot(tx.T, tx) + 2 * lambda_ * n * I, np.dot(tx.T, y))
+    w_ridge = np.linalg.solve(
+        np.dot(tx.T, tx) + 2 * lambda_ * tx.shape[0] * I, np.dot(tx.T, y)
+    )
     loss = compute_loss(y, tx, w_ridge)
     return w_ridge, loss
 
@@ -61,10 +64,7 @@ def compute_gradient(y, tx, w):
     Returns:
         An numpy array of shape (2, ) (same shape as w), containing the gradient of the loss at w.
     """
-    N = y.shape[0]
-    e1 = np.sum(y - w[0] - w[1] * tx[:, 1])
-    e2 = np.sum((y - w[0] - w[1] * tx[:, 1]) * tx[:, 1])
-    return np.array([(-1 / N) * e1, (-1 / N) * e2])
+    return (-1 / np.shape(tx)[0] * np.dot(tx.T, (y - np.dot(tx, w)))).flatten()
 
 
 def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
@@ -81,21 +81,15 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
         losses: a list of length max_iters containing the loss value (scalar) for each iteration of GD
         ws: a list of length max_iters containing the model parameters as numpy arrays of shape (2, ), for each iteration of GD
     """
-    ws = [initial_w]
-    losses = []
     w = initial_w
+    w = w.T
+    loss = compute_loss(y, tx, w.T)
     for n_iter in range(max_iters):
-        loss = compute_loss(y, tx, w.T)
         gradient = compute_gradient(y, tx, w.T)
         w = w - gamma * gradient
-        ws.append(w)
-        losses.append(loss)
-        print(
-            "GD iter. {bi}/{ti}: loss={l}, w0={w0}, w1={w1}".format(
-                bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]
-            )
-        )
-    return ws, losses
+        loss = compute_loss(y, tx, w.T)
+    # w = w.reshape(w.shape[0], w.shape[1])
+    return w.T, loss
 
 
 def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
@@ -113,26 +107,48 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
         losses: a list of length max_iters containing the loss value (scalar) for each iteration of SGD
         ws: a list of length max_iters containing the model parameters as numpy arrays of shape (2, ), for each iteration of SGD
     """
-    ws = [initial_w]
-    losses = []
     w = initial_w
+    w = w.T
+    loss = compute_loss(y, tx, w.T)
     for n_iter in range(max_iters):
-        loss = compute_loss(y, tx, w.T)
         gradient = compute_gradient(y, tx, w.T)
         w = w - gamma * gradient
-        ws.append(w)
-        losses.append(loss)
-        print(
-            "SGD iter. {bi}/{ti}: loss={l}, w0={w0}, w1={w1}".format(
-                bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]
-            )
-        )
-    return losses, ws
+        loss = compute_loss(y, tx, w.T)
+    # w = w.reshape(w.shape[0], w.shape[1])
+    return w.T, loss
 
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
-    pass
+    """
+
+    :param y:
+    :param tx:
+    :param initial_w:
+    :param max_iters:
+    :param gamma:
+    :return:
+    """
+    return 0
 
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
-    pass
+    """
+
+    :param y:
+    :param tx:
+    :param lambda_:
+    :param initial_w:
+    :param max_iters:
+    :param gamma:
+    :return:
+    """
+    return 0
+
+
+gamma = 0.1
+max_iters = 2
+initial_w = np.array([[0.5], [1.0]])
+y = np.array([[0.1], [0.3], [0.5]])
+tx = np.array([[2.3, 3.2], [1.0, 0.1], [1.4, 2.3]])
+a, m = ridge_regression(y, tx, 1)
+print(a, m)
