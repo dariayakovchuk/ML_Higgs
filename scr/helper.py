@@ -3,8 +3,14 @@ import numpy as np
 
 def load_data(path_dataset):
     """load data."""
-    y = np.genfromtxt(path_dataset, delimiter=",", skip_header=1, usecols=[1], converters={1: lambda x: 0 if b"b" in x else 1})
-    x = np.genfromtxt(path_dataset, delimiter=",", skip_header=1, usecols=range(2,32))
+    y = np.genfromtxt(
+        path_dataset,
+        delimiter=",",
+        skip_header=1,
+        usecols=[1],
+        converters={1: lambda x: 0 if b"b" in x else 1},
+    )
+    x = np.genfromtxt(path_dataset, delimiter=",", skip_header=1, usecols=range(2, 32))
     return x, y
 
 
