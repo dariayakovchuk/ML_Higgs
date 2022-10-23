@@ -12,10 +12,7 @@ def compute_loss(y, tx, w):
     Returns:
         the value of the loss (a scalar), corresponding to the input parameters w.
     """
-    N = y.shape[0]
-    print(np.dot(tx, w))
-    cost = (1 / (2 * N)) * np.sum((y - np.dot(tx, w)) ** 2)
-    return cost
+    return (1 / (2 * y.shape[0])) * np.sum((y - np.dot(tx, w)) ** 2)
 
 
 def calculate_loss_logistic(y, tx, w):
