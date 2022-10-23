@@ -13,7 +13,6 @@ def compute_loss(y, tx, w):
         the value of the loss (a scalar), corresponding to the input parameters w.
     """
     N = y.shape[0]
-    print(np.dot(tx, w))
     cost = (1 / (2 * N)) * np.sum((y - np.dot(tx, w)) ** 2)
     return cost
 
@@ -266,5 +265,5 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     loss = calculate_loss_logistic(y, tx, w)
     for iter in range(max_iters):
         loss, w = learning_by_penalized_gradient(y, tx, w, gamma, lambda_)
-    loss = calculate_loss_logistic(y, tx, w)
+    loss = calculate_loss_logistic(y, tx, w) + lambda_ * np.sum(np.square(w))
     return w, loss
