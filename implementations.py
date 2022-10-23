@@ -28,11 +28,7 @@ def calculate_loss_logistic(y, tx, w):
 
     Returns:
         a non-negative loss
-
-    1.52429481
     """
-    assert y.shape[0] == tx.shape[0]
-    assert tx.shape[1] == w.shape[0]
 
     # ***************************************************
     # INSERT YOUR CODE HERE
@@ -106,9 +102,6 @@ def calculate_gradient_logistic(y, tx, w):
     Returns:
         a vector of shape (D, 1)
     """
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
     return (1 / y.shape[0] * (sigmoid(tx.dot(w)) - y).T.dot(tx)).T
 
 
@@ -133,7 +126,6 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
         gradient = compute_gradient(y, tx, w.T)
         w = w - gamma * gradient
         loss = compute_loss(y, tx, w.T)
-    # w = w.reshape(w.shape[0], w.shape[1])
     return w.T, loss
 
 
@@ -159,7 +151,6 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
         gradient = compute_gradient(y, tx, w.T)
         w = w - gamma * gradient
         loss = compute_loss(y, tx, w.T)
-    # w = w.reshape(w.shape[0], w.shape[1])
     return w.T, loss
 
 
@@ -174,30 +165,6 @@ def sigmoid(t):
 
     """
     return 1 / (1 + np.exp(-t))
-
-
-def calculate_hessian(y, tx, w):
-    """return the Hessian of the loss function.
-
-    Args:
-        y:  shape=(N, 1)
-        tx: shape=(N, D)
-        w:  shape=(D, 1)
-
-    Returns:
-        a hessian matrix of shape=(D, D)
-
-    array([[0.28961235, 0.3861498 , 0.48268724],
-           [0.3861498 , 0.62182124, 0.85749269],
-           [0.48268724, 0.85749269, 1.23229813]])
-    """
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
-    S = sigmoid(tx.dot(w)).dot((1 - sigmoid(tx.dot(w))).T) * np.eye(
-        tx.shape[0], tx.shape[0]
-    )
-    return 1 / tx.shape[0] * tx.T.dot(S).dot(tx)
 
 
 def learning_by_gradient_descent(y, tx, w, gamma):
@@ -215,9 +182,6 @@ def learning_by_gradient_descent(y, tx, w, gamma):
         w: shape=(D, 1)
 
     """
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
     loss = calculate_loss_logistic(y, tx, w)
     w = w - gamma * (calculate_gradient_logistic(y, tx, w))
     return loss, w
@@ -236,14 +200,11 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         gradient: shape=(D, 1)
         hessian: shape=(D, D)
     """
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
     w = initial_w
-    w = w.T
     loss = calculate_loss_logistic(y, tx, w)
     for n_iter in range(max_iters):
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
+    loss = calculate_loss_logistic(y, tx, w)
     return w, loss
 
 
@@ -260,8 +221,6 @@ def penalized_logistic_regression(y, tx, w, lambda_):
         loss: scalar number
         gradient: shape=(D, 1)
     """
-    # ***************************************************
-    # ***************************************************
     loss = calculate_loss_logistic(y, tx, w) + lambda_ * np.sum(np.square(w))
     grad = calculate_gradient_logistic(y, tx, w) + 2 * lambda_ * w
     return loss, grad
@@ -284,13 +243,7 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
         w: shape=(D, 1)
 
     """
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
     loss, grad = penalized_logistic_regression(y, tx, w, lambda_)
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
     w = w - gamma * grad
     return loss, w
 
@@ -308,18 +261,10 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         loss: scalar number
         gradient: shape=(D, 1)
 
-    array([[-0.08370763],
-           [ 0.2467104 ],
-           [ 0.57712843]])
     """
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
     w = initial_w
-    w = w.T
     loss = calculate_loss_logistic(y, tx, w)
     for iter in range(max_iters):
         loss, w = learning_by_penalized_gradient(y, tx, w, gamma, lambda_)
-        if iter == max_iters - 2:
-            w_1 = w
-    return w, loss - lambda_ * np.sum(np.square(w_1))
+    loss = calculate_loss_logistic(y, tx, w)
+    return w, loss
