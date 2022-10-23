@@ -29,17 +29,7 @@ def calculate_loss_logistic(y, tx, w):
     Returns:
         a non-negative loss
     """
-
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # ***************************************************
-    return np.sum(
-        -(1 / y.shape[0])
-        * (
-            y.T.dot(np.log(sigmoid(tx.dot(w))))
-            + (1 - y).T.dot(np.log(1 - sigmoid(tx.dot(w))))
-        )
-    )
+    return np.sum(-(1 / y.shape[0]) * (y.T.dot(np.log(sigmoid(tx.dot(w))))+ (1 - y).T.dot(np.log(1 - sigmoid(tx.dot(w))))))
 
 
 def least_squares(y, tx):
@@ -197,8 +187,6 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 
     Returns:
         loss: scalar number
-        gradient: shape=(D, 1)
-        hessian: shape=(D, D)
     """
     w = initial_w
     loss = calculate_loss_logistic(y, tx, w)
@@ -241,7 +229,6 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     Returns:
         loss: scalar number
         w: shape=(D, 1)
-
     """
     loss, grad = penalized_logistic_regression(y, tx, w, lambda_)
     w = w - gamma * grad
@@ -250,21 +237,15 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     """return the loss and gradient.
-
     Args:
         y:  shape=(N, 1)
         tx: shape=(N, D)
         w:  shape=(D, 1)
         lambda_: scalar
-
-    Returns:
-        loss: scalar number
-        gradient: shape=(D, 1)
-
     """
     w = initial_w
     loss = calculate_loss_logistic(y, tx, w)
     for iter in range(max_iters):
         loss, w = learning_by_penalized_gradient(y, tx, w, gamma, lambda_)
-    loss = calculate_loss_logistic(y, tx, w)
+    loss = calculate_loss_logistic(y, tx, w) + lambda_ * np.sum(np.square(w))
     return w, loss
