@@ -36,7 +36,7 @@ def create_csv_submission(ids, y_pred, name):
         writer.writeheader()
         for r1, r2 in zip(ids, y_pred):
             writer.writerow({"Id": int(r1), "Prediction": int(r2)})
-            
+
 
 def standardize(x):
     """Standardize the original data set."""
@@ -45,3 +45,27 @@ def standardize(x):
     std_x = np.std(x, axis=0)
     x = x / std_x
     return x, mean_x, std_x
+
+
+def split_data(x, y, ratio, seed=1):
+    """
+    split the dataset based on the split ratio.
+    Args:
+        x: numpy array of shape (N,), N is the number of samples.
+        y: numpy array of shape (N,).
+        ratio: scalar in [0,1]
+        seed: integer.
+    Returns:
+        x_tr: numpy array containing the train data.
+        x_te: numpy array containing the test data.
+        y_tr: numpy array containing the train labels.
+        y_te: numpy array containing the test labels.
+    """
+    np.random.seed(seed)
+    temp = list(zip(x, y))
+    np.random.shuffle(temp)
+    x, y = zip(*temp)
+    indices_for_splittin = [int(len(x) * ratio)]
+    x_tr, x_te = np.split(x, indices_for_splittin)
+    y_tr, y_te = np.split(y, indices_for_splittin)
+    return x_tr, x_te, y_tr, y_te
