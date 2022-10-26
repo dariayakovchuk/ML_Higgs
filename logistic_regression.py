@@ -1,4 +1,5 @@
 import numpy as np 
+import csv
 
 class Logistic_Regression:
     def __init__(self, max_iters, gamma, train_set, test_set):
@@ -10,10 +11,22 @@ class Logistic_Regression:
         self.weights = None
         self.train_loss = None
         self.test_loss = None
+        self.y_values = None
+        self.train_accuracy = None
+        self.test_accuracy = None
+        self.prepare_data()
         
     def replace(self, data, value, new_value):
         data[data == value] = new_value
         return data
+    
+    def prepare_data(self):
+        self.y_values = np.unique(self.y_train)
+        if abs(self.y_values[0] - self.y_values[1]) > 1:
+            self.y_train = self.replace(self.y_train, self.y_values[0], 0)
+            self.y_train = self.replace(self.y_train, self.y_values[1], 1)
+            self.y_test = self.replace(self.y_test, self.y_values[0], 0)
+            self.y_test = self.replace(self.y_test, self.y_values[1], 1)
         
     def sigmoid(self, t):
         return 1 / (1 + np.exp(-t))
@@ -33,23 +46,30 @@ class Logistic_Regression:
         return np.array([1 if x > 0.5 else 0 for x in result])
     
     def logistic_regression(self):
-        self.y_train = self.replace(self.y_train, -1, 0)
         self.weights = self.initial_weights
         self.train_loss = self.calculate_loss(self.y_train, self.x_train, self.weights)
         for n_iter in range(self.max_iters):
             self.train_loss, self.weights = self.learning_by_gradient_descent(self.y_train, self.x_train, self.weights, self.gamma)
         self.train_loss = self.calculate_loss(self.y_train, self.x_train, self.weights)
-        print(self.train_loss)
         predictions = self.sigmoid(self.x_train.dot(self.weights))
         train_predictions = self.predict(predictions)
-        print(predictions)
         correct = np.sum(train_predictions == self.y_train)
-        train_accuracy = correct / np.shape(self.x_train)[0]
-        print(train_accuracy)
+        self.train_accuracy = correct / self.x_train.shape[0]
     
     def test(self):
-        output = self.sigmoid(self.x_test.dot(self.weights))
-        self.test_predictions = self.predict(output)
-        correct = np.sum(self.test_predictions == self.y_test)
-        test_accuracy = correct / np.shape(self.x_test)[0]
-        print(test_accuracy)
+        self.test_loss = self.calculate_loss(self.y_test, self.x_test, self.weights)
+        predictions = self.sigmoid(self.x_test.dot(self.weights))
+        test_predictions = self.predict(predictions)
+        correct = np.sum(test_predictions == self.y_test)
+        self.test_accuracy = correct / self.x_test.shape[0]
+        print(self.test_accuracy)
+        
+        
+    def submission(self):
+        self.test_predictions = self.replace(self.test_predictions, 0, self.y_values[0])
+        self.test_predictions = self.replace(self.test_predictions, 1, self.y_values[1])
+        with open('data/submission.csv', 'w', newline='') as file:
+            writer = csv.writer(file, delimiter=',')
+            for i in range(len(self.test_predictions)):
+                writer.writerow([str(i) + ", " + self.test_predictions[i]])
+
