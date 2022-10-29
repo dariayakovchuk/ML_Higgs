@@ -1,6 +1,7 @@
 """Some helper functions for project 1."""
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def load_csv_data(data_path, sub_sample=False):
@@ -69,3 +70,16 @@ def split_data(x, y, ratio, seed=1):
     x_tr, x_te = np.split(x, indices_for_splittin)
     y_tr, y_te = np.split(y, indices_for_splittin)
     return x_tr, x_te, y_tr, y_te
+
+
+def cross_validation_visualization(lambds, rmse_tr, rmse_te):
+    """visualization the curves of rmse_tr and rmse_te."""
+    plt.semilogx(lambds, rmse_tr, marker=".", color='b', label='train error')
+    plt.semilogx(lambds, rmse_te, marker=".", color='r', label='test error')
+    plt.xlabel("lambda")
+    plt.ylabel("r mse")
+    #plt.xlim(1e-4, 1)
+    plt.title("cross validation")
+    plt.legend(loc=2)
+    plt.grid(True)
+    plt.savefig("cross_validation")
