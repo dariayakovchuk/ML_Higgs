@@ -1,7 +1,7 @@
 # Project 1 in Machine Learning Course, EPFL
 ## Finding the Higgs boson challenge
 ## Team members:
-Mariia Vidmuk, Daria Yakovchuk, Alexsandra Novikova
+Mariia Vidmuk, Daria Yakovchuk, Aleksandra Novikova
 ## Structure of the project
 `implementations.py` : the implementations of basic functions and models.\
 `higgs.ipynb`: the notebook that contains all stages of building model.\
