@@ -78,7 +78,6 @@ def cross_validation_visualization(lambds, rmse_tr, rmse_te):
     plt.semilogx(lambds, rmse_te, marker=".", color='r', label='test error')
     plt.xlabel("lambda")
     plt.ylabel("r mse")
-    #plt.xlim(1e-4, 1)
     plt.title("cross validation")
     plt.legend(loc=2)
     plt.grid(True)
