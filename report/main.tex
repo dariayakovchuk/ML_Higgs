@@ -141,7 +141,8 @@ For this value (k = 29) classes are further predicted already for the real test 
 It is transparent that the most appropriate model to use is Logistic Regression which satisfies our classification task. And in practice, it works faster than KNN. 
 We attempted both Logistic Regression with and without regularisation. In most cases, our model didn't overfit, as shown below. So eventually, we have chosen the Logistic Regression without regularization as our main model to work on.
 
-Since we needed to specify hyperparameters, which is the step size($\gamma$) for gradient descent and degree of polynomial feature expansion, we used Grid Search to find optimal values in 2-fold Cross-Validation to get the best accuracy score. (best gamma $\approx$ 0.7 for 4000 iterations, best degree = 2)
+Since we needed to specify hyperparameters, which is the step size($\gamma$) for gradient descent and degree of polynomial feature expansion, we used Grid Search to find optimal values in 2-fold Cross-Validation to get the best accuracy score. (best gamma $\approx$ 0.6 for 500 iterations, best degree = 2)
+
 But ultimately, we came up with an idea to reduce the step size for each 10 000th iteration(out of 40 000, so we used the step size of whatever we prefer with degree 2 to get to the optimal solution eventually.
 
 The train and test accuracy results are presented in the following table for Logistic Regression and KNN.

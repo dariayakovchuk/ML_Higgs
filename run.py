@@ -66,7 +66,7 @@ def run():
     x_train, y_train = preprocess(x_train, y_train, 2)
     x_test, y_test = preprocess(x_test, y_test, 2)
 
-    model_lg = Logistic_Regression(0.35)
+    model_lg = Logistic_Regression(0.7)
     model_lg.train(x_train, y_train)
     model_lg.test(x_test, y_test)
     predictions = replace(model_lg.test_predictions, 0, -1)
