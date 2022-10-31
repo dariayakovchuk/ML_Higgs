@@ -6,8 +6,8 @@ Mariia Vidmuk, Daria Yakovchuk, Aleksandra Novikova
 `implementations.py` : the implementations of basic functions and models.\
 `higgs.ipynb`: the notebook that contains all stages of building model.\
 `helpers.py`: load_data, split_data, cross-validation_visualisation and standardization functions.\
-`run.py`: enables to make predictions.\
+`run.py`: makes predictions.\
 `README.md`\
-`report.tex`: report of project describing the whole process and methodology.
+`report.pdf`: report of project describing the whole process and methodology.
 
 
