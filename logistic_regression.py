@@ -2,7 +2,7 @@ import numpy as np
 
 class Logistic_Regression:
     def __init__(self, gamma):
-        self.max_iters = 4000
+        self.max_iters = 40000
         self.gamma = gamma
         self.x_train, self.y_train = None, None
         self.x_test, self.y_test = None, None
@@ -39,8 +39,8 @@ class Logistic_Regression:
         loss_prev = 0
         threshold = 1e-8
         for n_iter in range(self.max_iters):
-            # if n_iter % 1000 == 0:
-            #     self.gamma = self.gamma
+            if n_iter % 10000 == 0:
+                self.gamma = self.gamma/2
             self.train_loss, self.weights = self.learning_by_gradient_descent(self.y_train, self.x_train, self.weights, self.gamma)
             if abs(loss_prev - self.train_loss) < threshold:
                 break
