@@ -71,4 +71,3 @@ def run():
     model_lg.test(x_test, y_test)
     predictions = replace(model_lg.test_predictions, 0, -1)
     create_csv_submission(id, predictions, "sample-submission_final.csv")
-            
